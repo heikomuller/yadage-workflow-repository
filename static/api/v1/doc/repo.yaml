@@ -1,0 +1,219 @@
+swagger: "2.0"
+
+info:
+  version: 0.0.1
+  title: YADAGE - Workflow Template Server
+  description: API to query the YADAGE workflow template store
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+
+schemes:
+  - http
+host: cds-swg1.cims.nyu.edu/workflow-repository
+basePath: /api/v1
+
+paths:
+    /:
+        get:
+            summary: Welcome
+            description: Basic overview of the Web Service
+            tags:
+                - workflow
+            produces:
+              - application/json
+            responses:
+                200:
+                    description: Simple descriptive object
+                    schema:
+                        type: object
+                        required:
+                            - name
+                            - links
+                        properties:
+                            name:
+                                type: string
+                            links:
+                                type: array
+                                items:
+                                    $ref: "#/definitions/Reference"
+    /templates:
+        get:
+            summary: List workflow templates
+            description: Returns a list of all workflow templates in the repository
+            operationId: getTemplate
+            tags:
+                - workflow
+            produces:
+              - application/json
+            responses:
+                200:
+                    description: A list of workflow templates
+                    schema:
+                        type: object
+                        required:
+                            - workflows
+                        properties:
+                            workflows:
+                                type: array
+                                items:
+                                    $ref: "#/definitions/WorkflowTemplateDescriptor"
+    /templates/{templateIdentifier}:
+        get:
+            summary: Get workflow template
+            description: Returns the workflow template with the given identifier
+            operationId: listTemplates
+            tags:
+                - workflow
+            parameters:
+                - name: templateIdentifier
+                  in: path
+                  required: true
+                  description: The unique workflow template identifier
+                  type: string
+            produces:
+                - application/json
+            responses:
+                200:
+                    description: A workflow template
+                    schema:
+                        type: object
+                        $ref: "#/definitions/WorkflowTemplate"
+                404:
+                    description: Unknown workflow template
+definitions:
+    Dependency:
+        type: object
+        required:
+            - dependency_type
+        properties:
+            dependency_type:
+                type: string
+                enum:
+                    - jsonpath_ready
+            expressions:
+                type: array
+                items:
+                    type: string
+    MultiStepStage:
+        type: object
+        properties:
+            scheduler_type:
+                type: string
+                enum:
+                    - multistep-stage
+            parameters:
+                $ref : "#/definitions/ParameterSelection"
+            step:
+                $ref: "#/definitions/Packtivity"
+            workflow:
+                $ref: "#/definitions/WorkflowTemplate"
+            scatter:
+                type: object
+                properties:
+                    parameters:
+                        type: array
+                        items:
+                            type: string
+                    method:
+                        type: string
+    Pactivity:
+        type: object
+        required:
+            - process
+            - publisher
+            - environment
+        properties:
+            process:
+                type: object
+            publisher:
+                type: object
+            environment:
+                type: object
+    ParameterSelection:
+        type: object
+        properties:
+            key:
+                type: string
+            value:
+                oneOf:
+                    - type: string
+                    - type: array
+                    - type: number
+                    - type: object
+    Reference:
+        type: object
+        required:
+            - rel
+            - href
+        properties:
+            rel:
+                type: string
+            href:
+                type: string
+    SingleStepStage:
+        type: object
+        properties:
+            scheduler_type:
+                type: string
+                enum:
+                    - singlestep-stage
+            parameters:
+                $ref : "#/definitions/ParameterSelection"
+            step:
+                $ref: "#/definitions/Packtivity"
+            workflow:
+                $ref: "#/definitions/WorkflowTemplate"
+    Stage:
+        type: object
+        required:
+            - name
+            - scheduler
+        properties:
+            name:
+                type: string
+            dependencies:
+                type: object
+                $ref: "#/definitions/Dependency"
+            scheduler:
+                type: object
+                oneOf:
+                    - $ref: "#/definitions/SingleStepStage"
+                    - $ref: "#/definitions/MultiStepStage"
+    WorkflowTemplateDescriptor:
+        required:
+            - id
+            - links
+        properties:
+            id:
+                type: string
+            name:
+                type: string
+            description:
+                type: string
+            links:
+                type: array
+                items:
+                    $ref: "#/definitions/Reference"
+    WorkflowTemplate:
+        required:
+            - id
+            - name
+            - description
+            - stages
+            - links
+        properties:
+            id:
+                type: string
+            name:
+                type: string
+            description:
+                type: string
+            stages:
+                type: array
+                items:
+                    $ref: "#/definitions/Stage"
+            links:
+                type: array
+                items:
+                    $ref: "#/definitions/Reference"
