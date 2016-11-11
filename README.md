@@ -1,23 +1,17 @@
 # Yadage Workflow Repository
 
-A basic Web API for [Adage](https://github.com/diana-hep/adage.git) workflow
-templates. Provides access to a repository of templates for the [Yadage UI](https://github.com/diana-hep/yadage-webui).
+A basic Web API for [Adage](https://github.com/diana-hep/adage.git) workflow templates. Provides access to a repository of templates for the [Yadage UI](https://github.com/diana-hep/yadage-webui).
 
 
-The **source code** for the Web API server is located at:
+The **documentation** of the API is located in the folder
 ```
-src/main/py
+doc/html
 ```
 
-There is also a **documentation** of the API in the static folder
-```
-static\api\v1\doc
-```
 
 ## Setup
 
-The Web API uses Flask and is intended to run using a Python virtual environment.
-Set up the environment using the following commands:
+The Web API uses Flask and is intended to run in a Python virtual environment. Set up the environment using the following commands:
 
 ```
 cd src/main/py
@@ -29,23 +23,36 @@ pip install cap-schemas
 deactivate
 ```
 
+
 ## Run
 
-After the virtual environment is set up, the Web API can be run using the following
-command:
+After the virtual environment is set up, the Web API can be run using the following command:
 
 ```
 cd src/main/py
-./server.py [-a | --path <app-path>] [-d | --db <db-file>] [-p | --port <port-number>] [-s | --server <server-url>]
+./server.py
+    [-a | --path] <app-path>
+    [-d | --debug]
+    [-l | --logs] <log-directory>
+    [-p | --port] <port-number>
+    [-s | --server] <server-url>
+    [-w | --workflows] <db-file>
 
-app-path: Path on the server under which the app is accessible (Default: /workflow-repository/api/v1)
-db-file: TAB-delimited text file containing information about the workflow templates (Default: ./workflows.db)
-port-number: Port at which the app is running (Default: 5005)
-server-url: URL of the server running the app (Default: http://localhost)
+app-path:
+	Path on the server under which the app is accessible (Default: /workflow-repository/api/v1)
+-d/--debug:
+	Switch debug mode on (Default: False)
+log-directory:
+	Path to directory where log files are stored, only if not running in debug mode (Default: .)
+port-number:
+	Port at which the app is running (Default: 5005)
+server-url:
+	URL of the server running the app (Default: http://localhost)
+db-file:
+	TAB-delimited text file containing information about the workflow templates (Default: ../data/local-workflows.db)
 ```
 
-When running the Web API with the default command line parameters the application will
-be available on the local host at URL ```http://localhost:5005/workflow-repository/api/v1/```.
+When running the Web API with the default command line parameters the application will be available on the local host at URL http://localhost:5005/workflow-repository/api/v1/.
 
 
 ## Workflow Templates

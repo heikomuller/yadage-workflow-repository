@@ -1,0 +1,13 @@
+# ------------------------------------------------------------------------------
+# Workflow templates repository. Tab-delimited file with six columns:
+#
+# 1) workflow-identifier
+# 2) workflow-name
+# 3) workflow-description
+# 4) toplevel
+# 5) source-file-name
+# 6) Optional parameter description (JSON object)
+# ------------------------------------------------------------------------------
+#lhcoanalysis	LHCo Analysis	Large Hadron Collider Analysis	from-github/phenochain	lhcoanalysis.yml
+madgraph_delphes	Madgraph Delphes	Madgraph Delphes	../data	pheno_example.json	[{"name":"nevents","type":"int","label":"Number of Events","default":"100"}]
+rootflow_combined	Root Flow Combined	Root Flow Combined	../data	higgs_example.json	[{"name":"kHzz","type":"float","default":"0.1"}, {"name":"kAzz","type":"float","default":"0.1"}, {"name":"kHww","type":"float","default":"0.1"}, {"name":"kAww","type":"float","default":"0.1"}, {"name":"nevents","type":"int","label":"Number of Events","default":"100"}, {"name":"seeds","type":"array", "items":"int","default":"1,2,3,4,5,6,7"}]
