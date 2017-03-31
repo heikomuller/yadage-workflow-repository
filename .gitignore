@@ -1,2 +1,6 @@
 *.pyc
-wfrepo/venv
+yadagewfrepo/venv/
+yadagewfrepo/config.yaml
+log/
+yadagewfrepo.egg-info/
+tests/data/

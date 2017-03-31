@@ -1,3 +1,4 @@
-cap-schemas
-flask
-flask-cors
+flask>=0.10
+flask-cors>=3.0.2
+pyyaml
+jsonschema
