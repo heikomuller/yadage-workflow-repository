@@ -2,5 +2,7 @@
 yadagewfrepo/venv/
 yadagewfrepo/config.yaml
 log/
+build/
+dist/
 yadagewfrepo.egg-info/
 tests/data/

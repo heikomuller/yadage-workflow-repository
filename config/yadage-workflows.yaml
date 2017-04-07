@@ -73,3 +73,10 @@ templates:
         type: 'YAML'
         properties:
             resourceUri: 'https://raw.githubusercontent.com/lukasheinrich/yadage-workflows/master/atlasexamples/pileupfull/workflow.yml'
+    - identifier: 'dummy'
+      name: 'Atlas Examples - Pile-up full'
+      description: 'Atlas Examples - Pile-up full'
+      schema:
+        type: 'YAML'
+        properties:
+            resourceUri: 'https://raw.githubusercontent.com/lukasheinrich/hepsw-docker/master/lxpluslike/lxplus_yum_installed'

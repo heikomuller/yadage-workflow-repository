@@ -8,6 +8,19 @@ import os
 from util import from_list
 from wftemplate import SourceHandle, WorkflowTemplateRepository, TYPE_YAML
 import yaml
+import sys
+
+
+# ------------------------------------------------------------------------------
+#
+# Gobal Constants
+#
+# ------------------------------------------------------------------------------
+
+"""Environment Variable containing path to confiig file. If not set will try
+file config.yaml in working directory.
+"""
+ENV_CONFIG = 'YADAGEWFREPO_CONFIG'
 
 
 # ------------------------------------------------------------------------------
@@ -32,7 +45,7 @@ import yaml
 # 'properties' that references a list of 'key', 'value' pairs. We first try to
 # read the config file on local dsk. If this doesn't work try to access a
 # default config file that is maintained as part of the GitHub repository
-LOCAL_CONFIG_FILE = './config.yaml'
+LOCAL_CONFIG_FILE = os.getenv(ENV_CONFIG, './config.yaml')
 if os.path.isfile(LOCAL_CONFIG_FILE):
     with open(LOCAL_CONFIG_FILE, 'r') as f:
         obj = yaml.load(f.read())

@@ -11,6 +11,7 @@ stored accross multiple files that are referenced from within other files.
 from abc import abstractmethod
 import json
 from jsonschema import Draft4Validator, validators
+import logging
 import urllib2
 import urlparse
 import yaml
@@ -152,12 +153,16 @@ class WorkflowTemplateRepository(object):
 
     def load(self, listing):
         for item in listing:
-            wf = WorkflowTemplate.from_json(item)
-            if wf.identifier in self.db:
-                raise ValueError('duplicate workflow template: ' + wf.identifier)
-            self.validator.validate(wf.schema)
-            self.db[wf.identifier] = wf
-
+            # Make the load process fail save. Will log error messages for
+            # templates that fail to load but will not fail the load process.
+            try:
+                wf = WorkflowTemplate.from_json(item)
+                if wf.identifier in self.db:
+                    raise ValueError('duplicate workflow template: ' + wf.identifier)
+                self.validator.validate(wf.schema)
+                self.db[wf.identifier] = wf
+            except Exception as ex:
+                logging.error(ex)
 
 # ------------------------------------------------------------------------------
 #
