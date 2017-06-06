@@ -3,15 +3,15 @@
 from setuptools import setup
 
 setup(
-    name='yadagewfrepo',
+    name='yadagetemplates',
     version='0.0.1',
-    description='Web API for Adage workflow templates',
+    description='Web API for Yadage workflow templates',
     keywords='workflows reproducibility ',
     author='Heiko Mueller',
     author_email='heiko.muller@gmail.com',
-    url='https://github.com/heikomuller/yadage-workflow-repository',
+    url='https://github.com/heikomuller/yadage-workflow-template-repository',
     license='GPLv3',
-    packages=['yadagewfrepo'],
+    packages=['yadagetemplates'],
     package_data={'': ['LICENSE']},
     install_requires=[
         'flask>=0.10',

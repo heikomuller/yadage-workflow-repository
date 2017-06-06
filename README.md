@@ -45,6 +45,8 @@ properties:
       value: 5000
     - key: 'app.doc'
       value: 'http://cds-swg1.cims.nyu.edu/workflow-repository/api/v1/doc/index.html'
+    - key: ''app.debug'
+      value: false
     - key: 'db.uri'
       value:
           type: 'YAML'
@@ -63,6 +65,7 @@ Entries in the configuration file are (key,value)-pairs. The following are valid
 - **server.port**: Port on the server where Flask runs on.
 - **server.app**: Path of the Flask application that runs the API. The combination of *server.url*, *server.port*, and *server.app* is expected the root Url for the API.
 - **app.doc**: Url to the Html file containing the API documentation.
+- **app.debug**: Switch debugging ON/OFF.
 - **db.uri**: Path or Uri to Json or YAML file containing template information
 - **db.schema**: Path or Uri to Json or YAML file containing schema definition for YADAGE workflows.
 - **log.dir**: Path to directory for log files (optional).

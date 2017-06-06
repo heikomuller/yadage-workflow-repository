@@ -1,8 +1,8 @@
 import yaml
 import unittest
 
-from yadagewfrepo.wftemplate import SourceHandle, WorkflowTemplateRepository
-from yadagewfrepo.wftemplate import TYPE_JSON, TYPE_YAML
+from yadagetemplates.wftemplate import SourceHandle, WorkflowTemplateRepository
+from yadagetemplates.wftemplate import TYPE_JSON, TYPE_YAML
 
 CONFIG_FILE = '../config/yadage-workflows.yaml'
 YAML_GITHUB_RESOURCE = 'https://raw.githubusercontent.com/lukasheinrich/yadage-workflows/master/phenochain/madgraph_delphes.yml'

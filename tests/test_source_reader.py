@@ -1,7 +1,7 @@
 """Simple tests for source handle schema reader."""
 import unittest
 
-from yadagewfrepo.wftemplate import SourceHandle, TYPE_JSON, TYPE_YAML
+from yadagetemplates.wftemplate import SourceHandle, TYPE_JSON, TYPE_YAML
 
 YAML_FILE_RESOURCE = 'file:///home/heiko/projects/adage/workflow-repository/tests/data/phenochain/madgraph_delphes.yml'
 YAML_GITHUB_RESOURCE = 'https://raw.githubusercontent.com/lukasheinrich/yadage-workflows/master/phenochain/madgraph_delphes.yml'

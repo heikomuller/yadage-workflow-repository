@@ -5,7 +5,6 @@ import json
 import logging
 from logging.handlers import RotatingFileHandler
 import os
-from util import from_list
 from wftemplate import SourceHandle, WorkflowTemplateRepository, TYPE_YAML
 import yaml
 import sys
@@ -17,7 +16,7 @@ import sys
 #
 # ------------------------------------------------------------------------------
 
-"""Environment Variable containing path to confiig file. If not set will try
+"""Environment Variable containing path to config file. If not set will try
 file config.yaml in working directory.
 """
 ENV_CONFIG = 'YADAGEWFREPO_CONFIG'
@@ -37,6 +36,7 @@ ENV_CONFIG = 'YADAGEWFREPO_CONFIG'
 # server.url : Base Url of the server where the app is running
 # server.port: Port the server is running on
 # app.doc : Url to web service documentation
+# app.debug: Switch debugging ON/OFF
 # db.uri : Path or Uri to Json file containing template information
 # db.schema : Source handle definition
 # log.dir : Directory for log files
@@ -47,13 +47,14 @@ ENV_CONFIG = 'YADAGEWFREPO_CONFIG'
 # default config file that is maintained as part of the GitHub repository
 LOCAL_CONFIG_FILE = os.getenv(ENV_CONFIG, './config.yaml')
 if os.path.isfile(LOCAL_CONFIG_FILE):
+    print 'Loading configuration from local file ' + LOCAL_CONFIG_FILE
     with open(LOCAL_CONFIG_FILE, 'r') as f:
         obj = yaml.load(f.read())
 else:
     WEB_CONFIG_FILE_URI = 'https://raw.githubusercontent.com/heikomuller/yadage-workflow-repository/master/config/config.yaml'
-    # Soure handle for default config file on the Web.
+    print 'Loading configuration from Url ' + WEB_CONFIG_FILE_URI
     obj = SourceHandle(TYPE_YAML, {'resourceUri': WEB_CONFIG_FILE_URI}).read()
-config = from_list(obj['properties'])
+config = {kvp['key'] : kvp['value'] for kvp in obj['properties']}
 
 # App Url
 APP_PATH = config['server.apppath']
@@ -80,7 +81,7 @@ else:
     LOG_DIR = None
 
 # Flag to switch debugging on/off
-DEBUG = True
+DEBUG = config['app.debug']
 
 
 # ------------------------------------------------------------------------------
@@ -90,8 +91,10 @@ DEBUG = True
 # Create the app and enable cross-origin resource sharing
 app = Flask(__name__)
 app.config['APPLICATION_ROOT'] = APP_PATH
+app.config['PORT'] = SERVER_PORT
 app.config['DEBUG'] = DEBUG
 CORS(app)
+
 
 # Initialize the workflow repository and load the content from DB_FILE source.
 # THE DB_FILE may either point to a file on local disk (type = basestring) or
@@ -218,7 +221,7 @@ if __name__ == '__main__':
     from werkzeug.serving import run_simple
     from werkzeug.wsgi import DispatcherMiddleware
     # Switch logging on if not in debug mode
-    if app.debug is not True:
+    if app.debug is False:
         formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
         if not LOG_DIR is None:
             file_handler = RotatingFileHandler(os.path.join(LOG_DIR, 'workflow-repository.log'), maxBytes=1024 * 1024 * 100, backupCount=20)
@@ -230,4 +233,4 @@ if __name__ == '__main__':
     application = DispatcherMiddleware(Flask('dummy_app'), {
         app.config['APPLICATION_ROOT']: app,
     })
-    run_simple('0.0.0.0', SERVER_PORT, application, use_reloader=app.config['DEBUG'])
+    run_simple('0.0.0.0', SERVER_PORT, application, use_reloader=app.debug)

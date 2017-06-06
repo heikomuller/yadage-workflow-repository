@@ -1,8 +1,8 @@
 *.pyc
-yadagewfrepo/venv/
-yadagewfrepo/config.yaml
+yadagetemplates/venv/
+config.yaml
 log/
 build/
 dist/
-yadagewfrepo.egg-info/
+yadagetemplates.egg-info/
 tests/data/
