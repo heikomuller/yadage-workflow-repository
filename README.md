@@ -53,10 +53,7 @@ properties:
           properties:
               resourceUri: 'https://raw.githubusercontent.com/heikomuller/yadage-workflow-repository/master/config/yadage-workflows.yaml'
     - key: 'db.schema'
-      value:
-          type: 'JSON'
-          properties:
-              resourceUri: 'https://raw.githubusercontent.com/diana-hep/yadage-schemas/master/yadageschemas/yadage/workflow-schema.json'
+      value: 'https://raw.githubusercontent.com/diana-hep/yadage-schemas/master/yadageschemas/yadage/workflow-schema.json'
 ```
 
 Entries in the configuration file are (key,value)-pairs. The following are valid keys:

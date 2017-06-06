@@ -16,7 +16,6 @@ setup(
     install_requires=[
         'flask>=0.10',
         'flask-cors>=3.0.2',
-        'pyyaml',
-        'jsonschema'
+        'yadage>=0.10.8'
     ]
 )

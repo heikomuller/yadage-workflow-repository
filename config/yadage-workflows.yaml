@@ -8,9 +8,8 @@ templates:
             label: 'Number of Events'
             default: 100
       schema:
-        type: 'YAML'
-        properties:
-            resourceUri: 'https://raw.githubusercontent.com/lukasheinrich/yadage-workflows/master/phenochain/lhcoanalysis.yml'
+        source: 'from-github/phenochain'
+        identifier: 'lhcoanalysis.yml'
     - identifier: 'madgraph_delphes'
       name: 'Madgraph Delphes'
       description: 'Generate collision events with MadGraph5_aMC@NLO and shower, hadronize, and simulate the response of a detector like CMS with Delphes and Pythia'
@@ -20,9 +19,8 @@ templates:
             label: 'Number of Events'
             default: 100
       schema:
-        type: 'YAML'
-        properties:
-            resourceUri: 'https://raw.githubusercontent.com/lukasheinrich/yadage-workflows/master/phenochain/madgraph_delphes.ymlhttps://raw.githubusercontent.com/lukasheinrich/yadage-workflows/master/phenochain/madgraph_delphes.yml'
+        source: 'from-github/phenochain'
+        identifier: 'madgraph_delphes.yml'
     - identifier: 'madgraph_delphes_athena'
       name: 'Madgraph Delphes Athena'
       description: 'Madgraph Delphes Athena'
@@ -32,9 +30,8 @@ templates:
             label: 'Number of Events'
             default: 100
       schema:
-        type: 'YAML'
-        properties:
-            resourceUri: 'https://raw.githubusercontent.com/lukasheinrich/yadage-workflows/master/phenochain/madgraph_delphes_athena.yml'
+        source: 'from-github/phenochain'
+        identifier: 'madgraph_delphes_athena.yml'
     - identifier: 'madgraph_rivet'
       name: 'Madgraph Rivet'
       description: 'Madgraph Rivet'
@@ -44,9 +41,8 @@ templates:
             label: 'Number of Events'
             default: 100
       schema:
-        type: 'YAML'
-        properties:
-            resourceUri: 'https://raw.githubusercontent.com/lukasheinrich/yadage-workflows/master/phenochain/madgraph_rivet.yml'
+        source: 'from-github/phenochain'
+        identifier: 'madgraph_rivet.yml'
     - identifier: 'parallel_md'
       name: 'Parallel Madgraph Delphes'
       description: 'Parallel Madgraph Delphes'
@@ -56,20 +52,17 @@ templates:
             label: 'Number of Events'
             default: 100
       schema:
-        type: 'YAML'
-        properties:
-            resourceUri: 'https://raw.githubusercontent.com/lukasheinrich/yadage-workflows/master/phenochain/parallel_md.yml'
+        source: 'from-github/phenochain'
+        identifier: 'parallel_md.yml'
     - identifier: 'atlasexamples_fullchainderiv'
       name: 'Atlas Examples - Full chain deriv'
       description: 'Atlas Examples - Full chain deriv'
       schema:
-        type: 'YAML'
-        properties:
-            resourceUri: 'https://raw.githubusercontent.com/lukasheinrich/yadage-workflows/master/atlasexamples/fullchainderiv/rootflow.yml'
+        source: 'from-github/atlasexamples/fullchainderiv/'
+        identifier: 'rootflow.yml'
     - identifier: 'atlasexamples_pileupfull'
       name: 'Atlas Examples - Pile-up full'
       description: 'Atlas Examples - Pile-up full'
       schema:
-        type: 'YAML'
-        properties:
-            resourceUri: 'https://raw.githubusercontent.com/lukasheinrich/yadage-workflows/master/atlasexamples/pileupfull/workflow.yml'
+        source: 'from-github/atlasexamples/pileupfull'
+        identifier: 'workflow.yml'

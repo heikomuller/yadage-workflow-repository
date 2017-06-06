@@ -5,7 +5,9 @@ import json
 import logging
 from logging.handlers import RotatingFileHandler
 import os
-from wftemplate import SourceHandle, WorkflowTemplateRepository, TYPE_YAML
+import urllib2
+from wftemplate import WorkflowTemplateRepository
+import yadageschemas
 import yaml
 import sys
 
@@ -20,6 +22,9 @@ import sys
 file config.yaml in working directory.
 """
 ENV_CONFIG = 'YADAGEWFREPO_CONFIG'
+
+"""Url of default config file on GitHub."""
+WEB_CONFIG_FILE_URI = 'https://raw.githubusercontent.com/heikomuller/yadage-workflow-repository/master/config/config.yaml'
 
 
 # ------------------------------------------------------------------------------
@@ -38,22 +43,23 @@ ENV_CONFIG = 'YADAGEWFREPO_CONFIG'
 # app.doc : Url to web service documentation
 # app.debug: Switch debugging ON/OFF
 # db.uri : Path or Uri to Json file containing template information
-# db.schema : Source handle definition
+# db.schema : Path or Uri to Json or YAML file containing schema definition for
+#             YADAGE workflows.
 # log.dir : Directory for log files
 #
 # The file is expected to contain a Json object with a single element
 # 'properties' that references a list of 'key', 'value' pairs. We first try to
 # read the config file on local dsk. If this doesn't work try to access a
 # default config file that is maintained as part of the GitHub repository
-LOCAL_CONFIG_FILE = os.getenv(ENV_CONFIG, './config.yaml')
-if os.path.isfile(LOCAL_CONFIG_FILE):
-    print 'Loading configuration from local file ' + LOCAL_CONFIG_FILE
+LOCAL_CONFIG_FILE = os.getenv(ENV_CONFIG)
+if not LOCAL_CONFIG_FILE is None and os.path.isfile(LOCAL_CONFIG_FILE):
     with open(LOCAL_CONFIG_FILE, 'r') as f:
         obj = yaml.load(f.read())
+elif os.path.isfile('./config.yaml'):
+    with open('./config.yaml', 'r') as f:
+        obj = yaml.load(f.read())
 else:
-    WEB_CONFIG_FILE_URI = 'https://raw.githubusercontent.com/heikomuller/yadage-workflow-repository/master/config/config.yaml'
-    print 'Loading configuration from Url ' + WEB_CONFIG_FILE_URI
-    obj = SourceHandle(TYPE_YAML, {'resourceUri': WEB_CONFIG_FILE_URI}).read()
+    obj = yaml.load(urllib2.urlopen(WEB_CONFIG_FILE_URI).read())
 config = {kvp['key'] : kvp['value'] for kvp in obj['properties']}
 
 # App Url
@@ -70,7 +76,10 @@ BASE_URL += APP_PATH + '/'
 # Url to Web Service documentation
 DOC_URL = config['app.doc']
 # Source handle definition for general YADAGE workflow schema definition
-SCHEMA_SOURCE = SourceHandle.from_json(config['db.schema'])
+if 'db.schema' in config:
+    SCHEMA_DIR = config['db.schema']
+else:
+    SCHEMA_DIR = yadageschemas.schemadir
 # Template listing file or source handle definition
 DB_FILE = config['db.uri']
 # Directory for log files (if not in debug mode). The entry is optional. If no
@@ -99,13 +108,15 @@ CORS(app)
 # Initialize the workflow repository and load the content from DB_FILE source.
 # THE DB_FILE may either point to a file on local disk (type = basestring) or
 # is a source handle defintion (type: dict('type':...,'properties':...)).
-db = WorkflowTemplateRepository(SCHEMA_SOURCE.read())
-if type(DB_FILE) is str:
+db = WorkflowTemplateRepository()
+try:
     with open(DB_FILE, 'r') as f:
         wf_templates = yaml.load(f.read())['templates']
-else:
-    wf_templates = SourceHandle.from_json(DB_FILE).read()['templates']
-db.load(wf_templates)
+except IOError as ex:
+    print DB_FILE
+    obj = yaml.load(urllib2.urlopen(DB_FILE).read())
+    wf_templates = obj['templates']
+db.load(wf_templates, SCHEMA_DIR)
 
 
 # ------------------------------------------------------------------------------
