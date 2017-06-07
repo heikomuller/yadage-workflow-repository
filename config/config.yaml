@@ -11,5 +11,3 @@ properties:
       value: false
     - key: 'db.uri'
       value: 'https://raw.githubusercontent.com/heikomuller/yadage-workflow-repository/master/config/yadage-workflows.yaml'
-    - key: 'log.dir'
-      value: './log'

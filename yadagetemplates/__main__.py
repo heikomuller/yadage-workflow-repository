@@ -12,8 +12,12 @@ from yadagetemplates.server import app  # noqa
 # Switch logging on if not in debug mode
 if app.debug is False:
     formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
-    if not LOG_DIR is None:
-        file_handler = RotatingFileHandler(os.path.join(LOG_DIR, 'workflow-repository.log'), maxBytes=1024 * 1024 * 100, backupCount=20)
+    if not app.config['LOG_DIR'] is None:
+        file_handler = RotatingFileHandler(
+            os.path.join(app.config['LOG_DIR'], 'workflow-repository.log'),
+            maxBytes=1024 * 1024 * 100,
+            backupCount=20
+        )
         file_handler.setLevel(logging.ERROR)
         file_handler.setFormatter(formatter)
         app.logger.addHandler(file_handler)

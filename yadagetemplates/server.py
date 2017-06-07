@@ -51,7 +51,7 @@ WEB_CONFIG_FILE_URI = 'https://raw.githubusercontent.com/heikomuller/yadage-work
 # values are overwritten by configurations in local files. First attempts to
 # read the file that is specified in the value of the environment variable
 # YADAGEWFREPO_CONFIG. If the variable is not set an attempt to read file
-# 'config.yaml' in the current working directory is made. 
+# 'config.yaml' in the current working directory is made.
 def_conf = yaml.load(urllib2.urlopen(WEB_CONFIG_FILE_URI).read())['properties']
 config = {kvp['key'] : kvp['value'] for kvp in def_conf}
 LOCAL_CONFIG_FILE = os.getenv(ENV_CONFIG)
@@ -107,6 +107,8 @@ app = Flask(__name__)
 app.config['APPLICATION_ROOT'] = APP_PATH
 app.config['PORT'] = SERVER_PORT
 app.config['DEBUG'] = DEBUG
+if not LOG_DIR is None:
+    app.config['LOG_DIR'] = LOG_DIR
 CORS(app)
 
 
