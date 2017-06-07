@@ -4,10 +4,12 @@ properties:
     - key: 'server.url'
       value : 'http://localhost'
     - key: 'server.port'
-      value: 5000
+      value: 25012
     - key: 'app.doc'
       value: 'http://cds-swg1.cims.nyu.edu/workflow-repository/api/v1/doc/index.html'
     - key: 'app.debug'
       value: false
     - key: 'db.uri'
       value: 'https://raw.githubusercontent.com/heikomuller/yadage-workflow-repository/master/config/yadage-workflows.yaml'
+    - key: 'log.dir'
+      value: './log'

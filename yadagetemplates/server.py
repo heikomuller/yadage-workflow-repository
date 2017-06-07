@@ -33,9 +33,9 @@ WEB_CONFIG_FILE_URI = 'https://raw.githubusercontent.com/heikomuller/yadage-work
 #
 # ------------------------------------------------------------------------------
 
-# Expects a server config file in the local directory. The config file is
-# expected to contain values for all server configuration parameter. These
-# parameters are:
+# Read server configuration from file. The file is expected to contain a Json
+# object with a single element 'properties' that references a list of
+# 'key'-'value' pairs. The expected parameters are:
 #
 # server.apppath : Application path part of the Url to access the app
 # server.url : Base Url of the server where the app is running
@@ -47,10 +47,15 @@ WEB_CONFIG_FILE_URI = 'https://raw.githubusercontent.com/heikomuller/yadage-work
 #             YADAGE workflows.
 # log.dir : Directory for log files
 #
-# The file is expected to contain a Json object with a single element
-# 'properties' that references a list of 'key', 'value' pairs. We first try to
-# read the config file on local dsk. If this doesn't work try to access a
-# default config file that is maintained as part of the GitHub repository
+# The default configuration is read first from the GitHub repository. Default
+# values are overwritten by configurations in local files. First attempts to
+# read the file that is specified in the value of the environment variable
+# YADAGEWFREPO_CONFIG. If the variable is not set an attempt to read file
+# 'config.yaml' in the current working directory is made. 
+def_conf = yaml.load(urllib2.urlopen(WEB_CONFIG_FILE_URI).read())['properties']
+config = {kvp['key'] : kvp['value'] for kvp in def_conf}
+LOCAL_CONFIG_FILE = os.getenv(ENV_CONFIG)
+obj = None
 LOCAL_CONFIG_FILE = os.getenv(ENV_CONFIG)
 if not LOCAL_CONFIG_FILE is None and os.path.isfile(LOCAL_CONFIG_FILE):
     with open(LOCAL_CONFIG_FILE, 'r') as f:
@@ -58,9 +63,9 @@ if not LOCAL_CONFIG_FILE is None and os.path.isfile(LOCAL_CONFIG_FILE):
 elif os.path.isfile('./config.yaml'):
     with open('./config.yaml', 'r') as f:
         obj = yaml.load(f.read())
-else:
-    obj = yaml.load(urllib2.urlopen(WEB_CONFIG_FILE_URI).read())
-config = {kvp['key'] : kvp['value'] for kvp in obj['properties']}
+if not obj is None:
+    for kvp in obj['properties']:
+        config[kvp['key']] = kvp['value']
 
 # App Url
 APP_PATH = config['server.apppath']
