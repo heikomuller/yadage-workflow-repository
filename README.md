@@ -116,8 +116,15 @@ The workflow template API is available as a docker image on Docker Hub:
 docker pull heikomueller/yadage-workflow-repository
 ```
 
-An example command for running the docker image is shown below. The command assumes a local config file `/home/user/workflow-repository/config/config.yaml` is used and that the **server.port** is set to 5000.
+The command to run the docker image with the default configuration is:
+
+```
+docker run -d -p 25012:25012 yadage-workflow-repository
+```
+
+If you want to use a custom configuration you can use the follwoing command:
 
 ```
 docker run -d -p 5000:5000 -e YADAGEWFREPO_CONFIG="/config/config.yaml" -v /home/user/workflow-repository/config:/config heikomueller/yadage-workflow-repository
 ```
+The command assumes a local config file `/home/user/workflow-repository/config/config.yaml` is used and that the **server.port** is set to 5000.
