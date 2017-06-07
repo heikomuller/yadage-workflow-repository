@@ -120,7 +120,6 @@ try:
     with open(DB_FILE, 'r') as f:
         wf_templates = yaml.load(f.read())['templates']
 except IOError as ex:
-    print DB_FILE
     obj = yaml.load(urllib2.urlopen(DB_FILE).read())
     wf_templates = obj['templates']
 db.load(wf_templates, SCHEMA_DIR)
