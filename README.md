@@ -39,32 +39,26 @@ Below is the content of the default configuration file:
 properties:
     - key: 'server.apppath'
       value : '/workflow-repository/api/v1'
-    - key: server.url
+    - key: 'server.url'
       value : 'http://localhost'
     - key: 'server.port'
-      value: 5000
+      value: 25012
     - key: 'app.doc'
       value: 'http://cds-swg1.cims.nyu.edu/workflow-repository/api/v1/doc/index.html'
-    - key: ''app.debug'
+    - key: 'app.debug'
       value: false
     - key: 'db.uri'
-      value:
-          type: 'YAML'
-          properties:
-              resourceUri: 'https://raw.githubusercontent.com/heikomuller/yadage-workflow-repository/master/config/yadage-workflows.yaml'
-    - key: 'db.schema'
-      value: 'https://raw.githubusercontent.com/diana-hep/yadage-schemas/master/yadageschemas/yadage/workflow-schema.json'
+      value: 'https://raw.githubusercontent.com/heikomuller/yadage-workflow-repository/master/config/yadage-workflows.yaml'
 ```
 
 Entries in the configuration file are (key,value)-pairs. The following are valid keys:
 
 - **server.url**: Url of the web server where the API is running. Used as prefix to generate Url's for API resources.
 - **server.port**: Port on the server where Flask runs on.
-- **server.app**: Path of the Flask application that runs the API. The combination of *server.url*, *server.port*, and *server.app* is expected the root Url for the API.
+- **server.apppath**: Path of the Flask application that runs the API. The combination of *server.url*, *server.port*, and *server.app* is expected the root Url for the API.
 - **app.doc**: Url to the Html file containing the API documentation.
 - **app.debug**: Switch debugging ON/OFF.
 - **db.uri**: Path or Uri to Json or YAML file containing template information
-- **db.schema**: Path or Uri to Json or YAML file containing schema definition for YADAGE workflows.
 - **log.dir**: Path to directory for log files (optional).
 
 
@@ -77,11 +71,6 @@ templates:
     - identifier: 'lhcoanalysis'
       name: 'LHC Analysis'
       description: 'Large Hadron Collider Analysis'
-      parameters:
-          - name: 'nevents'
-            type: 'int'
-            label: 'Number of Events'
-            default: 100
       schema:
         source: 'from-github/phenochain'
         identifier: 'lhcoanalysis.yml'
