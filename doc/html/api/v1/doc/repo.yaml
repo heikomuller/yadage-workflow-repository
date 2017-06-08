@@ -10,7 +10,7 @@ info:
 
 schemes:
   - http
-host: cds-swg1.cims.nyu.edu
+host: localhost:25012
 basePath: /workflow-repository/api/v1
 
 paths:
@@ -136,11 +136,7 @@ definitions:
             key:
                 type: string
             value:
-                oneOf:
-                    - type: string
-                    - type: array
-                    - type: number
-                    - type: object
+                type: object
     Reference:
         type: object
         required:
@@ -177,9 +173,6 @@ definitions:
                 $ref: "#/definitions/Dependency"
             scheduler:
                 type: object
-                oneOf:
-                    - $ref: "#/definitions/SingleStepStage"
-                    - $ref: "#/definitions/MultiStepStage"
     WorkflowTemplateDescriptor:
         required:
             - id
