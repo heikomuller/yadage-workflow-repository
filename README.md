@@ -16,7 +16,7 @@ Below is a simple example to setup the workflow repository server after cloning 
 ```
 virtualenv venv
 source venv/bin/activate
-python setup.py install
+pip install -e .
 ```
 
 
@@ -25,7 +25,7 @@ python setup.py install
 The workflow repository API is implemented as a Flask application. To start the API use the following command:
 
 ```
-python yadagewfrepo/server.py
+python yadagewfrepo
 ```
 
 
@@ -67,12 +67,6 @@ Entries in the configuration file are (key,value)-pairs. The following are valid
 - **db.schema**: Path or Uri to Json or YAML file containing schema definition for YADAGE workflows.
 - **log.dir**: Path to directory for log files (optional).
 
-In most cases the values that are associated with a key in the config file are interpreted as strings. Only for *db.uri* and *db.schema* so called **Source Handles** are expected.
-
-### Source Handle
-
-Source handles specify references to file resources on the Web or the local file system. Source handles specify the file type and a list of type-specific properties. Currently, two file types are supported: **JSON** and **YAML**. For both file types the only property is **resourceUri** which references a file on the Web or local disk (e.g., file:///absolute/path/to/file).
-
 
 ## Workflow Templates
 
@@ -89,9 +83,8 @@ templates:
             label: 'Number of Events'
             default: 100
       schema:
-        type: 'YAML'
-        properties:
-            resourceUri: 'https://raw.githubusercontent.com/lukasheinrich/yadage-workflows/master/phenochain/lhcoanalysis.yml'
+        source: 'from-github/phenochain'
+        identifier: 'lhcoanalysis.yml'
     - identifier: 'madgraph_delphes'
       name: 'Madgraph Delphes'
       description: 'Generate collision events with MadGraph5_aMC@NLO and shower, hadronize, and simulate the response of a detector like CMS with Delphes and Pythia'
@@ -101,11 +94,10 @@ templates:
             label: 'Number of Events'
             default: 100
       schema:
-        type: 'YAML'
-        properties:
-            resourceUri: 'https://raw.githubusercontent.com/lukasheinrich/yadage-workflows/master/phenochain/madgraph_delphes.ymlhttps://raw.githubusercontent.com/lukasheinrich/yadage-workflows/master/phenochain/madgraph_delphes.yml'
+        source: 'from-github/phenochain'
+        identifier: 'madgraph_delphes.yml'
 ```
-Each entry has to have a unique **identifier**. The **name** and **description** are primarily intended for the Web GUI that displays a list of the availabe workflow templates for the user. The **schema** is expected to be a source handle that references a resource containing the actual workflow template definition.
+Each entry has to have a unique **identifier**. The **name** and **description** are primarily intended for the Web GUI that displays a list of the availabe workflow templates for the user. The **schema** is expected to be a source-identifier pair that is interpretable by the [Yadage workflow loader](https://github.com/diana-hep/yadage/blob/master/yadage/workflow_loader.py).
 
 
 ## Docker
