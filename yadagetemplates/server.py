@@ -56,7 +56,6 @@ def_conf = yaml.load(urllib2.urlopen(WEB_CONFIG_FILE_URI).read())['properties']
 config = {kvp['key'] : kvp['value'] for kvp in def_conf}
 LOCAL_CONFIG_FILE = os.getenv(ENV_CONFIG)
 obj = None
-LOCAL_CONFIG_FILE = os.getenv(ENV_CONFIG)
 if not LOCAL_CONFIG_FILE is None and os.path.isfile(LOCAL_CONFIG_FILE):
     with open(LOCAL_CONFIG_FILE, 'r') as f:
         obj = yaml.load(f.read())
@@ -103,13 +102,13 @@ DEBUG = config['app.debug']
 # ------------------------------------------------------------------------------
 
 # Create the app and enable cross-origin resource sharing
-app = Flask(__name__)
-app.config['APPLICATION_ROOT'] = APP_PATH
-app.config['PORT'] = SERVER_PORT
-app.config['DEBUG'] = DEBUG
+template_app = Flask(__name__)
+template_app.config['APPLICATION_ROOT'] = APP_PATH
+#template_app.config['PORT'] = SERVER_PORT
+template_app.config['DEBUG'] = DEBUG
 if not LOG_DIR is None:
-    app.config['LOG_DIR'] = LOG_DIR
-CORS(app)
+    template_app.config['LOG_DIR'] = LOG_DIR
+CORS(template_app)
 
 
 # Initialize the workflow repository and load the content from DB_FILE source.
@@ -131,7 +130,7 @@ db.load(wf_templates, SCHEMA_DIR)
 #
 # ------------------------------------------------------------------------------
 
-@app.route('/')
+@template_app.route('/')
 def get_welcome():
     """GET - Welcome Message
 
@@ -149,7 +148,7 @@ def get_welcome():
     })
 
 
-@app.route('/templates')
+@template_app.route('/templates')
 def get_templates():
     """GET - Template Listing
 
@@ -175,7 +174,7 @@ def get_templates():
     return jsonify({'workflows' : listing})
 
 
-@app.route('/templates/<string:template_id>')
+@template_app.route('/templates/<string:template_id>')
 def get_template(template_id):
     """GET - Templates
 
@@ -214,16 +213,16 @@ def get_template(template_id):
 #
 # ------------------------------------------------------------------------------
 
-@app.errorhandler(404)
+@template_app.errorhandler(404)
 def not_found(error):
     """404 JSON response generator."""
     return make_response(jsonify({'error': 'Not found'}), 404)
 
 
-@app.errorhandler(500)
+@template_app.errorhandler(500)
 def internal_error(exception):
     """Exception handler that logs exceptions."""
-    app.logger.error(exception)
+    template_app.logger.error(exception)
     return make_response(jsonify({'error': str(exception)}), 500)
 
 
@@ -238,16 +237,16 @@ if __name__ == '__main__':
     from werkzeug.serving import run_simple
     from werkzeug.wsgi import DispatcherMiddleware
     # Switch logging on if not in debug mode
-    if app.debug is False:
+    if template_app.debug is False:
         formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
         if not LOG_DIR is None:
             file_handler = RotatingFileHandler(os.path.join(LOG_DIR, 'workflow-repository.log'), maxBytes=1024 * 1024 * 100, backupCount=20)
             file_handler.setLevel(logging.ERROR)
             file_handler.setFormatter(formatter)
-            app.logger.addHandler(file_handler)
+            template_app.logger.addHandler(file_handler)
     # Load a dummy app at the root URL to give 404 errors.
     # Serve app at APPLICATION_ROOT for localhost development.
     application = DispatcherMiddleware(Flask('dummy_app'), {
-        app.config['APPLICATION_ROOT']: app,
+        template_app.config['APPLICATION_ROOT']: template_app,
     })
-    run_simple('0.0.0.0', SERVER_PORT, application, use_reloader=app.debug)
+    run_simple('0.0.0.0', SERVER_PORT, application, use_reloader=template_app.debug)
