@@ -2,11 +2,11 @@ properties:
     - key: 'server.apppath'
       value : '/workflow-repository/api/v1'
     - key: 'server.url'
-      value : 'http://cds-swg1.cims.nyu.edu'
+      value : 'http://localhost'
     - key: 'server.port'
       value: 25012
     - key: 'app.doc'
-      value: 'http://cds-swg1.cims.nyu.edu/workflow-repository/api/v1/doc/index.html'
+      value: 'http://localhost:8088/doc/workflow-repository/api/v1/index.html'
     - key: 'app.debug'
       value: false
     - key: 'db.uri'
