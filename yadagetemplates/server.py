@@ -40,6 +40,7 @@ WEB_CONFIG_FILE_URI = 'https://raw.githubusercontent.com/heikomuller/yadage-work
 # server.apppath : Application path part of the Url to access the app
 # server.url : Base Url of the server where the app is running
 # server.port: Port the server is running on
+# app.name : Service name
 # app.doc : Url to web service documentation
 # app.debug: Switch debugging ON/OFF
 # db.uri : Path or Uri to Json file containing template information
@@ -96,7 +97,14 @@ else:
 # Flag to switch debugging on/off
 DEBUG = config['app.debug']
 
-
+SERVICE_DESCRIPTOR = {
+    'name': config['app.name'],
+    'links' : [
+        {'rel' : 'self', 'href' : BASE_URL},
+        {'rel' : 'doc', 'href' : DOC_URL},
+        {'rel' : 'templates', 'href' : BASE_URL + 'templates'}
+    ]
+}
 # ------------------------------------------------------------------------------
 # Initilize Flask App
 # ------------------------------------------------------------------------------
@@ -138,14 +146,7 @@ def get_welcome():
     references (including a reference to the API documentation, which is
     currently a hard coded URL).
     """
-    return jsonify({
-        'name': 'Workflow Template Server API',
-        'links' : [
-            {'rel' : 'self', 'href' : BASE_URL},
-            {'rel' : 'doc', 'href' : DOC_URL},
-            {'rel' : 'templates', 'href' : BASE_URL + 'templates'}
-        ]
-    })
+    return jsonify(SERVICE_DESCRIPTOR)
 
 
 @template_app.route('/templates')

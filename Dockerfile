@@ -1,5 +1,5 @@
 #FROM ubuntu:latest
-FROM python:2
+FROM python:2.7
 
 COPY ./requirements.txt /app/requirements.txt
 COPY ./setup.* /app/
