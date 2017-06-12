@@ -1,4 +1,4 @@
-FROM ubuntu:latest
+#FROM ubuntu:latest
 FROM python:2
 
 COPY ./requirements.txt /app/requirements.txt
